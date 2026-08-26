@@ -32,11 +32,11 @@ module.exports = defineConfig({
     disable: process.env.DISABLE_MEDUSA_ADMIN === 'true',
     backendUrl: process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000',
   },
-  modules: hasS3FileStorage ? [
+  modules: [
     {
       resolve: '@medusajs/medusa/file',
       options: {
-        providers: [
+        providers: hasS3FileStorage ? [
           {
             resolve: '@medusajs/medusa/file-s3',
             id: 's3',
@@ -54,8 +54,17 @@ module.exports = defineConfig({
               },
             },
           },
+        ] : [
+          {
+            resolve: '@medusajs/medusa/file-local',
+            id: 'local',
+            options: {
+              upload_dir: '/app/static',
+              backend_url: `${process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000'}/static`,
+            },
+          },
         ],
       },
     },
-  ] : [],
+  ],
 })
