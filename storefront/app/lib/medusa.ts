@@ -36,6 +36,36 @@ const headers = () => ({
   "x-publishable-api-key": publishableKey || "",
 })
 
+let regionIdPromise: Promise<string | undefined> | undefined
+
+function getRegionId() {
+  if (!regionIdPromise) {
+    regionIdPromise = fetch(`${backendUrl}/store/regions?limit=100`, { headers: headers() })
+      .then(async (response) => {
+        if (!response.ok) return undefined
+        const data = await response.json() as { regions?: Array<{ id: string; currency_code?: string }> }
+        return (data.regions || []).find((region) => region.currency_code?.toLowerCase() === "eur")?.id || data.regions?.[0]?.id
+      })
+      .catch(() => undefined)
+  }
+  return regionIdPromise
+}
+
+async function fetchProducts(params: Record<string, string>) {
+  const regionId = await getRegionId()
+  const attempts = [
+    { ...params, ...(regionId ? { region_id: regionId } : {}), fields: "*variants.calculated_price,*variants.prices,*images,+metadata" },
+    { ...params, fields: "*variants.prices,*images,+metadata" },
+    params,
+  ]
+
+  for (const queryParams of attempts) {
+    const response = await fetch(`${backendUrl}/store/products?${new URLSearchParams(queryParams)}`, { headers: headers() })
+    if (response.ok) return response
+  }
+  throw new Error("Medusa products request failed")
+}
+
 function categoryOf(product: ApiProduct): "Жени" | "Мъже" {
   const values = [
     product.title,
@@ -75,30 +105,14 @@ function mapProduct(product: ApiProduct): MedusaProduct {
 
 export async function getMedusaProducts(): Promise<MedusaProduct[]> {
   if (!medusaConfigured) return []
-  const query = new URLSearchParams({
-    limit: "100",
-    country_code: "bg",
-    fields: "*variants.calculated_price,*images,+metadata",
-  })
-  const response = await fetch(`${backendUrl}/store/products?${query}`, {
-    headers: headers(),
-  })
-  if (!response.ok) throw new Error(`Medusa products request failed: ${response.status}`)
+  const response = await fetchProducts({ limit: "100" })
   const data = await response.json() as { products?: ApiProduct[] }
   return (data.products || []).map(mapProduct)
 }
 
 export async function getMedusaProduct(handle: string): Promise<MedusaProduct | null> {
   if (!medusaConfigured) return null
-  const query = new URLSearchParams({
-    handle,
-    country_code: "bg",
-    fields: "*variants.calculated_price,*images,+metadata",
-  })
-  const response = await fetch(`${backendUrl}/store/products?${query}`, {
-    headers: headers(),
-  })
-  if (!response.ok) throw new Error(`Medusa product request failed: ${response.status}`)
+  const response = await fetchProducts({ handle })
   const data = await response.json() as { products?: ApiProduct[] }
   return data.products?.[0] ? mapProduct(data.products[0]) : null
 }
