@@ -37,6 +37,8 @@ const headers = () => ({
 
 function categoryOf(product: ApiProduct): "Жени" | "Мъже" {
   const values = [
+    product.title,
+    product.handle,
     product.metadata?.gender,
     product.metadata?.category,
     product.collection?.title,
@@ -70,7 +72,7 @@ function mapProduct(product: ApiProduct): MedusaProduct {
 
 export async function getMedusaProducts(): Promise<MedusaProduct[]> {
   if (!medusaConfigured) return []
-  const response = await fetch(`${backendUrl}/store/products?limit=100&fields=*variants.calculated_price,*variants.prices,*categories,*collection,+metadata`, {
+  const response = await fetch(`${backendUrl}/store/products?limit=100`, {
     headers: headers(),
   })
   if (!response.ok) throw new Error(`Medusa products request failed: ${response.status}`)
@@ -80,7 +82,7 @@ export async function getMedusaProducts(): Promise<MedusaProduct[]> {
 
 export async function getMedusaProduct(handle: string): Promise<MedusaProduct | null> {
   if (!medusaConfigured) return null
-  const response = await fetch(`${backendUrl}/store/products?handle=${encodeURIComponent(handle)}&fields=*variants.calculated_price,*variants.prices,*categories,*collection,+metadata`, {
+  const response = await fetch(`${backendUrl}/store/products?handle=${encodeURIComponent(handle)}`, {
     headers: headers(),
   })
   if (!response.ok) throw new Error(`Medusa product request failed: ${response.status}`)
