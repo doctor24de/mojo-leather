@@ -1,5 +1,7 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
+# Medusa's TypeScript config and Admin build require development dependencies.
+ENV NODE_ENV=development
 COPY package*.json ./
 RUN npm ci
 COPY . .
