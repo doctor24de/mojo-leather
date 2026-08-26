@@ -11,6 +11,7 @@ type ApiProduct = {
   title: string
   handle: string
   thumbnail?: string | null
+  images?: Array<{ url?: string | null }>
   description?: string | null
   metadata?: Record<string, unknown> | null
   categories?: Array<{ name?: string; handle?: string }>
@@ -63,7 +64,7 @@ function mapProduct(product: ApiProduct): MedusaProduct {
     color: String(product.metadata?.color || product.metadata?.colour || "Естествена кожа"),
     price: amount,
     badge: product.metadata?.badge ? String(product.metadata.badge) : undefined,
-    image: product.thumbnail || "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=1200&q=90",
+    image: product.thumbnail || product.images?.[0]?.url || "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=1200&q=90",
     description: product.description || "Премиум кожено яке, създадено да носи характер с всяка следваща история.",
     variantId: variant?.id,
     currencyCode,
@@ -72,7 +73,12 @@ function mapProduct(product: ApiProduct): MedusaProduct {
 
 export async function getMedusaProducts(): Promise<MedusaProduct[]> {
   if (!medusaConfigured) return []
-  const response = await fetch(`${backendUrl}/store/products?limit=100`, {
+  const query = new URLSearchParams({
+    limit: "100",
+    country_code: "bg",
+    fields: "*variants.calculated_price,*images,+metadata",
+  })
+  const response = await fetch(`${backendUrl}/store/products?${query}`, {
     headers: headers(),
   })
   if (!response.ok) throw new Error(`Medusa products request failed: ${response.status}`)
@@ -82,7 +88,12 @@ export async function getMedusaProducts(): Promise<MedusaProduct[]> {
 
 export async function getMedusaProduct(handle: string): Promise<MedusaProduct | null> {
   if (!medusaConfigured) return null
-  const response = await fetch(`${backendUrl}/store/products?handle=${encodeURIComponent(handle)}`, {
+  const query = new URLSearchParams({
+    handle,
+    country_code: "bg",
+    fields: "*variants.calculated_price,*images,+metadata",
+  })
+  const response = await fetch(`${backendUrl}/store/products?${query}`, {
     headers: headers(),
   })
   if (!response.ok) throw new Error(`Medusa product request failed: ${response.status}`)
