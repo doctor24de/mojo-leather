@@ -1,4 +1,4 @@
-export type Product = { slug:string; name:string; category:"Жени"|"Мъже"; color:string; price:number; badge?:string; image:string; description:string }
+export type Product = { slug:string; name:string; category:"Жени"|"Мъже"; color:string; price:number; badge?:string; image:string; description:string; material?:string; craftsmanship?:string }
 
 export const products: Product[] = [
  {slug:"aviator-no-07",name:"Авиатор No. 07",category:"Мъже",color:"Еспресо",price:395,badge:"Ново",image:"https://images.unsplash.com/photo-1520975954732-35dd22299614?auto=format&fit=crop&w=1200&q=90",description:"Класически авиаторски силует от мека агнешка кожа, създаден за движение и характер."},

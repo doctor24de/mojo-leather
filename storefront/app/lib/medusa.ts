@@ -66,6 +66,8 @@ function mapProduct(product: ApiProduct): MedusaProduct {
     badge: product.metadata?.badge ? String(product.metadata.badge) : undefined,
     image: product.thumbnail || product.images?.[0]?.url || "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=1200&q=90",
     description: product.description || "Премиум кожено яке, създадено да носи характер с всяка следваща история.",
+    material: product.metadata?.material ? String(product.metadata.material) : undefined,
+    craftsmanship: product.metadata?.craftsmanship ? String(product.metadata.craftsmanship) : undefined,
     variantId: variant?.id,
     currencyCode,
   }

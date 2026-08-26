@@ -1,0 +1,33 @@
+.product-color { margin: 0 0 28px; }
+.product-color > span, .size-heading > span { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.product-color p { display: flex; align-items: center; gap: 9px; margin: 10px 0 0; font-family: Georgia, serif; }
+.product-color i { width: 16px; height: 16px; border-radius: 50%; background: #2a211b; border: 1px solid #0002; }
+.size-heading { display: flex; align-items: center; justify-content: space-between; }
+.size-heading button { width: auto !important; height: auto !important; border: 0 !important; border-bottom: 1px solid !important; background: transparent; padding: 0 0 5px; text-transform: uppercase; font-size: 10px; letter-spacing: .08em; cursor: pointer; }
+.product-reviews { padding: 110px 5vw; background: var(--cream); }
+.product-reviews h2 { font-size: clamp(46px, 6vw, 84px); margin: 18px 0 55px; }
+.review-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+.review-grid blockquote { margin: 0; padding: 34px 32px 10px 0; }
+.review-grid blockquote + blockquote { padding-left: 32px; border-left: 1px solid var(--line); }
+.review-grid blockquote > div { font-size: 12px; letter-spacing: .2em; }
+.review-grid blockquote p { font: 20px/1.55 Georgia, serif; margin: 24px 0 35px; }
+.review-grid blockquote footer { font-size: 10px; text-transform: uppercase; letter-spacing: .12em; }
+.size-modal { position: fixed; inset: 0; z-index: 100; background: #111b; display: grid; place-items: center; padding: 20px; }
+.size-modal-card { position: relative; background: var(--paper); width: min(760px, 100%); padding: 55px; }
+.size-modal-card h2 { font-size: 48px; margin: 12px 0 18px; }
+.size-modal-close { position: absolute; right: 20px; top: 14px; border: 0; background: none; font: 34px Georgia; cursor: pointer; }
+.size-table-wrap { overflow-x: auto; margin-top: 35px; }
+.size-modal table { width: 100%; border-collapse: collapse; }
+.size-modal th, .size-modal td { text-align: left; padding: 15px 10px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.size-modal th { text-transform: uppercase; font-size: 10px; letter-spacing: .08em; }
+
+@media (max-width: 900px) {
+  .product-reviews { padding: 75px 22px; }
+  .review-grid { grid-template-columns: 1fr; }
+  .review-grid blockquote, .review-grid blockquote + blockquote { padding: 28px 0; border-left: 0; border-bottom: 1px solid var(--line); }
+  .size-modal-card { padding: 42px 20px 25px; }
+  .size-modal-card h2 { font-size: 38px; }
+  .size-heading { align-items: flex-start; gap: 20px; }
+  .size-heading button { text-align: right; }
+  .product-color { margin-top: -5px; }
+}
