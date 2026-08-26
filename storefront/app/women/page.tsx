@@ -1,0 +1,2 @@
+import ProductGrid from "../components/ProductGrid";import{products}from"../data"
+export default function Women(){const items=products.filter(p=>p.category==="Жени");return <main className="catalog-page"><header><p className="eyebrow">Колекция 2026</p><h1>За нея.<br/><em>Без компромис.</em></h1><p>Кожени якета с уверена линия, създадени да останат.</p></header><div className="catalog-tools"><span>Жени</span><span>{items.length} модела</span></div><ProductGrid items={items}/></main>}

@@ -1,0 +1,4 @@
+@media (max-width: 900px) {
+  .header-actions button { font-size: 10px; }
+  .header-actions button::before { content: none; }
+}
