@@ -1,12 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { formatPrice, products as sampleProducts, type Product } from "../data"
+import { formatPrice, type Product } from "../data"
 import { getMedusaProducts, medusaConfigured } from "../lib/medusa"
 
-export default function ProductGrid({ items, category }: { items?: Product[]; category?: "Жени" | "Мъже" }) {
-  const fallback = items || sampleProducts
-  const [products, setProducts] = useState<Product[]>(fallback)
+export default function ProductGrid({ category }: { category?: "Жени" | "Мъже" }) {
+  const [products, setProducts] = useState<Product[]>([])
 
   useEffect(() => {
     if (!medusaConfigured) return
@@ -15,7 +14,7 @@ export default function ProductGrid({ items, category }: { items?: Product[]; ca
         const filtered = category ? result.filter((product) => product.category === category) : result
         setProducts(filtered)
       })
-      .catch(() => setProducts(fallback))
+      .catch(() => setProducts([]))
   }, [category])
 
   if (!products.length) return <p className="empty-products">Все още няма публикувани продукти в тази категория.</p>

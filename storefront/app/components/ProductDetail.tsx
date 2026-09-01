@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { formatPrice, products as sampleProducts, type Product } from "../data"
+import { formatPrice, type Product } from "../data"
 import { getMedusaProduct, medusaConfigured } from "../lib/medusa"
 
 const reviews = [
@@ -11,14 +11,13 @@ const reviews = [
 ]
 
 export default function ProductDetail({ slug }: { slug: string }) {
-  const fallback = sampleProducts.find((product) => product.slug === slug)
-  const [product, setProduct] = useState<Product | null>(fallback || null)
+  const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(medusaConfigured)
   const [sizeChartOpen, setSizeChartOpen] = useState(false)
 
   useEffect(() => {
     if (!medusaConfigured) return
-    getMedusaProduct(slug).then((result) => setProduct(result || fallback || null)).catch(() => setProduct(fallback || null)).finally(() => setLoading(false))
+    getMedusaProduct(slug).then((result) => setProduct(result)).catch(() => setProduct(null)).finally(() => setLoading(false))
   }, [slug])
 
   if (loading && !product) return <main className="product-loading">Зареждаме продукта…</main>
