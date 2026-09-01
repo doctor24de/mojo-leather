@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" role="img" aria-labelledby="title desc">
+  <title id="title">Furia Leather photo placeholder</title>
+  <desc id="desc">Място за собствена снимка на модел</desc>
+  <rect width="1200" height="1500" fill="#d8d0c4"/>
+  <path d="M0 1120 1200 680v820H0Z" fill="#c0b4a5"/>
+  <g fill="#191714" text-anchor="middle" font-family="Arial, sans-serif">
+    <text x="600" y="700" font-size="72" font-weight="700" letter-spacing="10">FURIA LEATHER</text>
+    <text x="600" y="785" font-size="30" letter-spacing="4">ДОБАВИ СОБСТВЕНА СНИМКА</text>
+  </g>
+</svg>

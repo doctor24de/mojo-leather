@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { formatPrice, type Product } from "../data"
 import { getMedusaProduct, medusaConfigured } from "../lib/medusa"
+import { useCommerce } from "./CommerceProvider"
 
 const reviews = [
   ["Кожата е изключително мека, а кройката стои прекрасно. Якето изглежда още по-добре на живо.", "Мария К. · София"],
@@ -11,9 +12,12 @@ const reviews = [
 ]
 
 export default function ProductDetail({ slug }: { slug: string }) {
-  const [product, setProduct] = useState<Product | null>(null)
+  const { addItem, cartBusy } = useCommerce()
+  const [product, setProduct] = useState<(Product & { variants?: Array<{id:string;title:string;options:Array<{value:string}>}> }) | null>(null)
   const [loading, setLoading] = useState(medusaConfigured)
   const [sizeChartOpen, setSizeChartOpen] = useState(false)
+  const [selectedVariantId, setSelectedVariantId] = useState("")
+  const [message, setMessage] = useState("")
 
   useEffect(() => {
     if (!medusaConfigured) return
@@ -25,6 +29,13 @@ export default function ProductDetail({ slug }: { slug: string }) {
 
   const material = product.material || "100% естествена кожа"
   const craftsmanship = product.craftsmanship || "Вискозна подплата. Произведено в малка серия."
+  const variants = product.variants || []
+  const addSelected = async () => {
+    if (!selectedVariantId) { setMessage("Моля, избери размер."); return }
+    setMessage("")
+    try { await addItem(selectedVariantId); setMessage("Продуктът е добавен в количката.") }
+    catch (error) { setMessage(error instanceof Error ? error.message : "Не успяхме да добавим продукта.") }
+  }
 
   return <>
     <main className="product-page">
@@ -37,9 +48,10 @@ export default function ProductDetail({ slug }: { slug: string }) {
         <div className="product-color"><span>Цвят</span><p><i aria-hidden="true"/> {product.color}</p></div>
         <div className="sizes">
           <div className="size-heading"><span>Избери размер</span><button type="button" onClick={() => setSizeChartOpen(true)}>Вижте таблицата с размери</button></div>
-          <div>{["XS","S","M","L","XL"].map(s=><button key={s}>{s}</button>)}</div>
+          <div>{variants.map(variant=>{const size=variant.options?.[0]?.value||variant.title;return <button className={selectedVariantId===variant.id?"selected":""} aria-pressed={selectedVariantId===variant.id} onClick={()=>{setSelectedVariantId(variant.id);setMessage("")}} key={variant.id}>{size}</button>})}</div>
         </div>
-        <button className="add-to-cart">Добави в количката</button>
+        <button className="add-to-cart" disabled={cartBusy} onClick={addSelected}>{cartBusy?"Добавяме…":"Добави в количката"}</button>
+        {message&&<p className="product-message" role="status">{message}</p>}
         <details open><summary>Материал и изработка</summary><p>{material}. {craftsmanship}</p></details>
         <details><summary>Доставка и връщане</summary><p>Безплатна доставка над €250 и 30 дни за връщане.</p></details>
       </div>

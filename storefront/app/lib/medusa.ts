@@ -1,118 +1,34 @@
 import type { Product } from "../data"
-
-export type MedusaProduct = Product & {
-  id: string
-  variantId?: string
-  currencyCode?: string
-}
-
-type ApiProduct = {
-  id: string
-  title: string
-  handle: string
-  thumbnail?: string | null
-  images?: Array<{ url?: string | null }>
-  description?: string | null
-  metadata?: Record<string, unknown> | null
-  categories?: Array<{ name?: string; handle?: string }>
-  collection?: { title?: string; handle?: string } | null
-  variants?: Array<{
-    id: string
-    calculated_price?: {
-      calculated_amount?: number
-      currency_code?: string
-    } | null
-    prices?: Array<{ amount: number; currency_code: string }>
-  }>
-}
-
-const backendUrl = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL?.replace(/\/$/, "")
-const publishableKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
-
-export const medusaConfigured = Boolean(backendUrl && publishableKey)
-
-const headers = () => ({
-  "Content-Type": "application/json",
-  "x-publishable-api-key": publishableKey || "",
-})
-
-let regionIdPromise: Promise<string | undefined> | undefined
-
-function getRegionId() {
-  if (!regionIdPromise) {
-    regionIdPromise = fetch(`${backendUrl}/store/regions?limit=100`, { headers: headers() })
-      .then(async (response) => {
-        if (!response.ok) return undefined
-        const data = await response.json() as { regions?: Array<{ id: string; currency_code?: string }> }
-        return (data.regions || []).find((region) => region.currency_code?.toLowerCase() === "eur")?.id || data.regions?.[0]?.id
-      })
-      .catch(() => undefined)
-  }
-  return regionIdPromise
-}
-
-async function fetchProducts(params: Record<string, string>) {
-  const regionId = await getRegionId()
-  const attempts = [
-    { ...params, ...(regionId ? { region_id: regionId } : {}), fields: "*variants.calculated_price,*variants.prices,*images,+metadata" },
-    { ...params, fields: "*variants.prices,*images,+metadata" },
-    params,
-  ]
-
-  for (const queryParams of attempts) {
-    const response = await fetch(`${backendUrl}/store/products?${new URLSearchParams(queryParams)}`, { headers: headers() })
-    if (response.ok) return response
-  }
-  throw new Error("Medusa products request failed")
-}
-
-function categoryOf(product: ApiProduct): "Жени" | "Мъже" {
-  const values = [
-    product.title,
-    product.handle,
-    product.metadata?.gender,
-    product.metadata?.category,
-    product.collection?.title,
-    ...(product.categories || []).flatMap((category) => [category.name, category.handle]),
-  ].filter(Boolean).join(" ").toLocaleLowerCase("bg")
-
-  return /women|woman|жени|дам/.test(values) ? "Жени" : "Мъже"
-}
-
-function mapProduct(product: ApiProduct): MedusaProduct {
-  const variant = product.variants?.[0]
-  const calculated = variant?.calculated_price
-  const fallbackPrice = variant?.prices?.[0]
-  const amount = calculated?.calculated_amount ?? fallbackPrice?.amount ?? 0
-  const currencyCode = calculated?.currency_code ?? fallbackPrice?.currency_code ?? "eur"
-
-  return {
-    id: product.id,
-    slug: product.handle,
-    name: product.title,
-    category: categoryOf(product),
-    color: String(product.metadata?.color || product.metadata?.colour || "Естествена кожа"),
-    price: amount,
-    badge: product.metadata?.badge ? String(product.metadata.badge) : undefined,
-    image: product.thumbnail || product.images?.[0]?.url || "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=1200&q=90",
-    description: product.description || "Премиум кожено яке, създадено да носи характер с всяка следваща история.",
-    material: product.metadata?.material ? String(product.metadata.material) : undefined,
-    craftsmanship: product.metadata?.craftsmanship ? String(product.metadata.craftsmanship) : undefined,
-    variantId: variant?.id,
-    currencyCode,
-  }
-}
-
-export async function getMedusaProducts(): Promise<MedusaProduct[]> {
-  if (!medusaConfigured) return []
-  const response = await fetchProducts({ limit: "100" })
-  const data = await response.json() as { products?: ApiProduct[] }
-  return (data.products || []).map(mapProduct)
-}
-
-export async function getMedusaProduct(handle: string): Promise<MedusaProduct | null> {
-  if (!medusaConfigured) return null
-  const response = await fetchProducts({ handle })
-  const data = await response.json() as { products?: ApiProduct[] }
-  return data.products?.[0] ? mapProduct(data.products[0]) : null
-}
+export type ProductVariant={id:string;title:string;options:Array<{value:string;option?:{title?:string}}>}
+export type MedusaProduct=Product&{id:string;variants:ProductVariant[];currencyCode?:string}
+export type CartLine={id:string;title:string;quantity:number;unit_price:number;thumbnail?:string|null;variant?:{title?:string;product?:{handle?:string}}}
+export type Cart={id:string;items:CartLine[];item_total:number;total:number;currency_code:string}
+export type Customer={id:string;email:string;first_name?:string|null;last_name?:string|null;phone?:string|null}
+export type CustomerOrder={id:string;display_id:number;status:string;fulfillment_status?:string;payment_status?:string;total:number;currency_code:string;created_at:string}
+type ApiProduct={id:string;title:string;handle:string;thumbnail?:string|null;images?:Array<{url?:string|null}>;description?:string|null;metadata?:Record<string,unknown>|null;categories?:Array<{name?:string;handle?:string}>;collection?:{title?:string;handle?:string}|null;variants?:Array<{id:string;title:string;options?:Array<{value:string;option?:{title?:string}}>;calculated_price?:{calculated_amount?:number;currency_code?:string}|null;prices?:Array<{amount:number;currency_code:string}>}>}
+export const backendUrl=process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL?.replace(/\/$/,"")||""
+const publishableKey=process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY||""
+export const medusaConfigured=Boolean(backendUrl&&publishableKey)
+const headers=(token?:string)=>({"Content-Type":"application/json","x-publishable-api-key":publishableKey,...(token?{Authorization:`Bearer ${token}`}:{})})
+async function request<T>(path:string,init:RequestInit={},token?:string):Promise<T>{const response=await fetch(`${backendUrl}${path}`,{...init,headers:{...headers(token),...(init.headers||{})}});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error((data as{message?:string}).message||"Заявката не беше успешна.");return data as T}
+let regionIdPromise:Promise<string|undefined>|undefined
+export function getRegionId(){if(!regionIdPromise)regionIdPromise=request<{regions?:Array<{id:string;currency_code?:string}>}>("/store/regions?limit=100").then(d=>(d.regions||[]).find(r=>r.currency_code?.toLowerCase()==="eur")?.id||d.regions?.[0]?.id).catch(()=>undefined);return regionIdPromise}
+async function fetchProducts(params:Record<string,string>){const regionId=await getRegionId();const attempts=[{...params,...(regionId?{region_id:regionId}:{}),fields:"*variants.calculated_price,*variants.prices,*variants.options,*images,*options,+metadata"},{...params,...(regionId?{region_id:regionId}:{})},params];for(const query of attempts){try{return await request<{products?:ApiProduct[]}>(`/store/products?${new URLSearchParams(query)}`)}catch{}}throw new Error("Продуктите не могат да бъдат заредени.")}
+function categoryOf(product:ApiProduct):"Жени"|"Мъже"{const values=[product.title,product.handle,product.metadata?.gender,product.metadata?.category,product.collection?.title,...(product.categories||[]).flatMap(c=>[c.name,c.handle])].filter(Boolean).join(" ").toLocaleLowerCase("bg");return/women|woman|жени|дам/.test(values)?"Жени":"Мъже"}
+function mapProduct(product:ApiProduct):MedusaProduct{const variant=product.variants?.[0],calculated=variant?.calculated_price,fallback=variant?.prices?.[0];return{id:product.id,slug:product.handle,name:product.title,category:categoryOf(product),color:String(product.metadata?.color||product.metadata?.colour||"Естествена кожа"),price:calculated?.calculated_amount??fallback?.amount??0,badge:product.metadata?.badge?String(product.metadata.badge):undefined,image:product.thumbnail||product.images?.[0]?.url||"",description:product.description||"Кожено яке, създадено за дълъг живот.",material:product.metadata?.material?String(product.metadata.material):undefined,craftsmanship:product.metadata?.craftsmanship?String(product.metadata.craftsmanship):undefined,variants:(product.variants||[]).map(v=>({id:v.id,title:v.title,options:v.options||[]})),currencyCode:calculated?.currency_code??fallback?.currency_code??"eur"}}
+export async function getMedusaProducts(){if(!medusaConfigured)return[];const d=await fetchProducts({limit:"100"});return(d.products||[]).map(mapProduct)}
+export async function getMedusaProduct(handle:string){if(!medusaConfigured)return null;const d=await fetchProducts({handle});return d.products?.[0]?mapProduct(d.products[0]):null}
+export async function createCart(){const region_id=await getRegionId();if(!region_id)throw new Error("Липсва активен регион.");return(await request<{cart:Cart}>("/store/carts",{method:"POST",body:JSON.stringify({region_id})})).cart}
+export async function retrieveCart(id:string){return(await request<{cart:Cart}>(`/store/carts/${id}?fields=*items,*items.variant,*items.variant.product`)).cart}
+export async function addCartLine(cartId:string,variantId:string){await request(`/store/carts/${cartId}/line-items`,{method:"POST",body:JSON.stringify({variant_id:variantId,quantity:1})});return retrieveCart(cartId)}
+export async function updateCartLine(cartId:string,lineId:string,quantity:number){await request(`/store/carts/${cartId}/line-items/${lineId}`,{method:"POST",body:JSON.stringify({quantity})});return retrieveCart(cartId)}
+export async function deleteCartLine(cartId:string,lineId:string){await request(`/store/carts/${cartId}/line-items/${lineId}`,{method:"DELETE"});return retrieveCart(cartId)}
+export async function loginCustomer(email:string,password:string){return(await request<{token:string}>("/auth/customer/emailpass",{method:"POST",body:JSON.stringify({email,password})})).token}
+export async function registerCustomer(input:{email:string;password:string;first_name:string;last_name:string}){const{token}=await request<{token:string}>("/auth/customer/emailpass/register",{method:"POST",body:JSON.stringify({email:input.email,password:input.password})});await request("/store/customers",{method:"POST",body:JSON.stringify({email:input.email,first_name:input.first_name,last_name:input.last_name})},token);return loginCustomer(input.email,input.password)}
+export async function retrieveCustomer(token:string){return(await request<{customer:Customer}>("/store/customers/me",{},token)).customer}
+export async function retrieveCustomerOrders(token:string){return(await request<{orders:CustomerOrder[]}>("/store/orders?limit=100&order=-created_at",{},token)).orders||[]}
+export async function requestPasswordReset(email:string){await request("/auth/customer/emailpass/reset-password",{method:"POST",body:JSON.stringify({identifier:email})})}
+export async function resetPassword(token:string,email:string,password:string){await request("/auth/customer/emailpass/update",{method:"POST",body:JSON.stringify({email,password})},token)}
+export async function beginGoogleLogin(callbackUrl:string){return request<{location?:string;token?:string}>("/auth/customer/google",{method:"POST",body:JSON.stringify({callback_url:callbackUrl})})}
+export async function finishGoogleLogin(query:string){return(await request<{token:string}>(`/auth/customer/google/callback?${query}`,{method:"POST"})).token}
+export async function createGoogleCustomer(token:string,email:string){await request("/store/customers",{method:"POST",body:JSON.stringify({email})},token);return(await request<{token:string}>("/auth/token/refresh",{method:"POST"},token)).token}

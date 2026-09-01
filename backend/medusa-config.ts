@@ -1,4 +1,4 @@
-import { loadEnv, defineConfig } from '@medusajs/framework/utils'
+import { loadEnv, defineConfig, Modules, ContainerRegistrationKeys } from '@medusajs/framework/utils'
 
 loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
@@ -8,6 +8,13 @@ const hasS3FileStorage = [
   process.env.S3_SECRET_ACCESS_KEY,
   process.env.S3_BUCKET,
   process.env.S3_ENDPOINT,
+].every(Boolean)
+
+const hasGoogleAuth = [
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.GOOGLE_CALLBACK_URL,
+  process.env.AUTH_MFA_ENCRYPTION_KEY,
 ].every(Boolean)
 
 module.exports = defineConfig({
@@ -32,6 +39,12 @@ module.exports = defineConfig({
       authCors: process.env.AUTH_CORS!,
       jwtSecret: process.env.JWT_SECRET,
       cookieSecret: process.env.COOKIE_SECRET,
+      ...(hasGoogleAuth ? {
+        authMethodsPerActor: {
+          user: ['emailpass'],
+          customer: ['emailpass', 'google'],
+        },
+      } : {}),
     }
   },
   admin: {
@@ -39,6 +52,30 @@ module.exports = defineConfig({
     backendUrl: process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000',
   },
   modules: [
+    ...(hasGoogleAuth ? [{
+      resolve: '@medusajs/medusa/auth',
+      dependencies: [Modules.CACHE, ContainerRegistrationKeys.LOGGER],
+      options: {
+        mfa: {
+          encryption_key: process.env.AUTH_MFA_ENCRYPTION_KEY,
+        },
+        providers: [
+          {
+            resolve: '@medusajs/medusa/auth-emailpass',
+            id: 'emailpass',
+          },
+          {
+            resolve: '@medusajs/medusa/auth-google',
+            id: 'google',
+            options: {
+              clientId: process.env.GOOGLE_CLIENT_ID,
+              clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+              callbackUrl: process.env.GOOGLE_CALLBACK_URL,
+            },
+          },
+        ],
+      },
+    }] : []),
     {
       resolve: '@medusajs/medusa/file',
       options: {
