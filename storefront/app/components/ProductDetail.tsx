@@ -53,7 +53,7 @@ export default function ProductDetail({ slug }: { slug: string }) {
     {sizeChartOpen && <div className="size-modal" role="dialog" aria-modal="true" aria-labelledby="size-chart-title" onClick={() => setSizeChartOpen(false)}>
       <div className="size-modal-card" onClick={(event) => event.stopPropagation()}>
         <button className="size-modal-close" type="button" aria-label="Затвори" onClick={() => setSizeChartOpen(false)}>×</button>
-        <p className="eyebrow">Mojo Leather</p><h2 id="size-chart-title">Таблица с размери</h2>
+        <p className="eyebrow">Furia Leather</p><h2 id="size-chart-title">Таблица с размери</h2>
         <p>Измерете обиколката върху тънка дреха. Ако сте между два размера, изберете по-големия.</p>
         <div className="size-table-wrap"><table><thead><tr><th>Размер</th><th>Гръдна обиколка</th><th>Талия</th><th>Ханш</th></tr></thead><tbody>
           <tr><td>XS</td><td>80–84 cm</td><td>62–66 cm</td><td>88–92 cm</td></tr>
