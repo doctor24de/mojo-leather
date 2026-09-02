@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react"
 import { formatPrice, type Product } from "../data"
-import { addCartLine, completeQuickOrder, createCart, getMedusaProduct, medusaConfigured, type MedusaProduct } from "../lib/medusa"
+import { addCartLine, completeQuickOrder, createCart, ensureBulgariaCommerce, getMedusaProduct, medusaConfigured, type MedusaProduct } from "../lib/medusa"
 import { useCommerce } from "./CommerceProvider"
 
 const reviews = [
@@ -49,7 +49,7 @@ export default function ProductDetail({ slug, initialProduct }: { slug: string; 
     catch (error) { setMessage(error instanceof Error ? error.message : "Не успяхме да добавим продукта.") }
   }
   const toggleFavorite=()=>{let saved:string[]=[];try{saved=JSON.parse(localStorage.getItem("furia-favorites")||"[]")}catch{}const next=saved.includes(slug)?saved.filter(item=>item!==slug):[...saved,slug];localStorage.setItem("furia-favorites",JSON.stringify(next));setFavorite(next.includes(slug))}
-  const submitQuickOrder=async(event:FormEvent<HTMLFormElement>)=>{event.preventDefault();const form=new FormData(event.currentTarget);const variantId=String(form.get("variant")||selectedVariantId);if(!variantId){setQuickSuccess("Моля, изберете размер.");return}setQuickBusy(true);setQuickSuccess("");try{const cart=await createCart();await addCartLine(cart.id,variantId);const order=await completeQuickOrder(cart.id,{email:String(form.get("email")),name:String(form.get("name")),phone:String(form.get("phone")),address:String(form.get("address")),color:product.color,size:String(form.get("size")),payment:String(form.get("payment")),notes:String(form.get("notes")||""),product:product.name});setQuickSuccess(`Поръчка${order.display_id?` №${order.display_id}`:"та"} е приета. Ще се свържем с вас за потвърждение.`)}catch(error){console.error("Quick order failed",error);setQuickSuccess(error instanceof Error?`Поръчката не беше изпратена: ${error.message}`:"Не успяхме да изпратим поръчката. Обадете ни се на 0894 668 387.")}finally{setQuickBusy(false)}}
+  const submitQuickOrder=async(event:FormEvent<HTMLFormElement>)=>{event.preventDefault();const form=new FormData(event.currentTarget);const variantId=String(form.get("variant")||selectedVariantId);if(!variantId){setQuickSuccess("Моля, изберете размер.");return}setQuickBusy(true);setQuickSuccess("");try{await ensureBulgariaCommerce();const cart=await createCart();await addCartLine(cart.id,variantId);const order=await completeQuickOrder(cart.id,{email:String(form.get("email")),name:String(form.get("name")),phone:String(form.get("phone")),address:String(form.get("address")),color:product.color,size:String(form.get("size")),payment:String(form.get("payment")),notes:String(form.get("notes")||""),product:product.name});setQuickSuccess(`Поръчка${order.display_id?` №${order.display_id}`:"та"} е приета. Ще се свържем с вас за потвърждение.`)}catch(error){console.error("Quick order failed",error);setQuickSuccess(error instanceof Error?`Поръчката не беше изпратена: ${error.message}`:"Не успяхме да изпратим поръчката. Обадете ни се на 0894 668 387.")}finally{setQuickBusy(false)}}
 
   return <>
     <nav className="product-breadcrumb" aria-label="Път до продукта"><a href="/">Начало</a><span>/</span><a href={product.category==="Жени"?"/women":"/men"}>{product.category}</a><span>/</span><strong>{product.name}</strong></nav>
