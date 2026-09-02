@@ -1,7 +1,7 @@
 .announcement { display: block; overflow: hidden; white-space: nowrap; padding: 0; }
 .brand-logo { display:block; overflow:hidden; width:178px; height:60px; }
 .brand-logo img { width:100%; height:100%; object-fit:contain; }
-.brand-logo-dark img { transform:scale(1.42); }
+.brand-logo-dark img { transform:none; }
 .brand-logo-light { width:210px; height:90px; margin:-18px 0 5px; }
 .brand-logo-light img { transform:scale(1.5); }
 .announcement-track { display: flex; width: max-content; height: 100%; animation: announcement-scroll 30s linear infinite; }
