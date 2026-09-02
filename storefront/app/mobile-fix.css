@@ -73,6 +73,31 @@
     margin: 0;
   }
 
+  .product-page .quick-order-trigger {
+    display: flex;
+    width: 100%;
+  }
+
+  .quick-order-modal {
+    align-items: end;
+    padding: 0;
+  }
+
+  .quick-order-card {
+    width: 100%;
+    max-height: 92svh;
+    padding: 42px 20px 24px;
+  }
+
+  .quick-order-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .footer-commerce {
+    display: grid;
+  }
+
   .product-page .stock-status {
     display: flex;
     margin: 0 0 18px;
