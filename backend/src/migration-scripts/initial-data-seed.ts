@@ -35,7 +35,7 @@ export default async function initial_data_seed({
     ModuleRegistrationName.FULFILLMENT
   );
 
-  const countries = ["gb", "de", "dk", "se", "fr", "es", "it"];
+  const countries = ["bg", "gb", "de", "dk", "se", "fr", "es", "it"];
 
   logger.info("Seeding store data...");
   const {
@@ -163,6 +163,10 @@ export default async function initial_data_seed({
       {
         name: "Europe",
         geo_zones: [
+          {
+            country_code: "bg",
+            type: "country",
+          },
           {
             country_code: "gb",
             type: "country",
