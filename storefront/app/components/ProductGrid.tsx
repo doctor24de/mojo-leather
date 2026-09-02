@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Link from "next/link"
 import { formatPrice, type Product } from "../data"
 import { getMedusaProductsPage, medusaConfigured } from "../lib/medusa"
 
@@ -31,5 +30,5 @@ export default function ProductGrid({ category, outlet = false, pageSize = 24, h
   if (loading && !products.length) return <div className="product-grid product-skeletons" aria-label="Зареждаме продуктите">{Array.from({length:Math.min(pageSize,4)},(_,i)=><div key={i}><span/><i/></div>)}</div>
   if (!products.length) return <p className="empty-products">{outlet?"В момента няма останали единични бройки. Проверете отново скоро.":"Все още няма публикувани продукти в тази категория."}</p>
 
-  return <><div className="product-grid">{products.map(product => <article className="product-card" key={product.slug}><Link className="product-image" href={`/product/${product.slug}`} prefetch><img src={product.image} alt={`Кожено яке ${product.name}`} loading="lazy" decoding="async"/>{product.badge&&<span className="badge">{product.badge}</span>}<span className="quick-add">Разгледай</span></Link><button className={`favorite-button ${favorites.includes(product.slug)?"active":""}`} onClick={()=>toggleFavorite(product.slug)} aria-label={favorites.includes(product.slug)?"Премахни от любими":"Добави в любими"}>♡</button><Link className="product-info" href={`/product/${product.slug}`} prefetch><div><h3>{product.name}</h3><p>{product.category} · {product.color}</p></div><strong>{formatPrice(product.price)}</strong></Link></article>)}</div>{!hideLoadMore&&hasMore&&<button className="load-more" disabled={loading} onClick={()=>setOffset(value=>value+pageSize)}>{loading?"Зареждаме…":"Покажи още"}</button>}</>
+  return <><div className="product-grid">{products.map(product => <article className="product-card" key={product.slug}><a className="product-image" href={`/product/${product.slug}`}><img src={product.image} alt={`Кожено яке ${product.name}`} loading="lazy" decoding="async"/>{product.badge&&<span className="badge">{product.badge}</span>}<span className="quick-add">Разгледай</span></a><button className={`favorite-button ${favorites.includes(product.slug)?"active":""}`} onClick={()=>toggleFavorite(product.slug)} aria-label={favorites.includes(product.slug)?"Премахни от любими":"Добави в любими"}>♡</button><a className="product-info" href={`/product/${product.slug}`}><div><h3>{product.name}</h3><p>{product.category} · {product.color}</p></div><strong>{formatPrice(product.price)}</strong></a></article>)}</div>{!hideLoadMore&&hasMore&&<button className="load-more" disabled={loading} onClick={()=>setOffset(value=>value+pageSize)}>{loading?"Зареждаме…":"Покажи още"}</button>}</>
 }
