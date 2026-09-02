@@ -23,7 +23,7 @@ export async function POST(req: MedusaRequest<CheckoutBody>, res: MedusaResponse
     line_items: [{ quantity: 1, price_data: { currency: String(order.currency_code || "eur").toLowerCase(), unit_amount: Math.round(Number(order.total) * 100), product_data: { name: `Furia Leather · Поръчка №${order.display_id}` } } }],
     metadata: { medusa_order_id: order.id, medusa_display_id: String(order.display_id) },
     payment_intent_data: { metadata: { medusa_order_id: order.id, medusa_display_id: String(order.display_id) } },
-    success_url: `${backendUrl}/store/stripe-checkout/complete?session_id={CHECKOUT_SESSION_ID}`,
+    success_url: `${backendUrl}/stripe-checkout/complete?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${storefrontUrl}/?payment=cancelled`,
   })
   res.status(200).json({ url: session.url })

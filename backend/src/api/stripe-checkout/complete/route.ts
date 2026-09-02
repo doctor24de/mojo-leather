@@ -3,11 +3,6 @@ import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
 import { capturePaymentWorkflow } from "@medusajs/core-flows"
 import Stripe from "stripe"
 
-// Stripe redirects the customer's browser here after payment. A browser
-// redirect can't include Medusa's x-publishable-api-key header, so this one
-// callback is public and authenticates the result directly with Stripe.
-export const AUTHENTICATE = false
-
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   const storefrontUrl = (process.env.STOREFRONT_URL || "https://mojo.doktor24.xyz").replace(/\/$/, "")
   const secretKey = process.env.STRIPE_SECRET_KEY
