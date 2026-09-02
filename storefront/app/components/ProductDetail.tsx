@@ -64,7 +64,7 @@ export default function ProductDetail({ slug }: { slug: string }) {
         </div>
         <p className="stock-status"><i/> В наличност <span>· изпращане до 1 работен ден</span></p>
         <div className="product-buy"><button className="add-to-cart" disabled={cartBusy} onClick={addSelected}>{cartBusy?"Добавяме…":"Добави в количката"}</button><strong>{formatPrice(product.price)}</strong></div>
-        <button className="quick-order-trigger" type="button" onClick={()=>setQuickOrderOpen(true)}>Бърза поръчка без регистрация <span>→</span></button>
+        <button className="quick-order-trigger" type="button" onClick={()=>setQuickOrderOpen(true)}><span><b>Бърза поръчка</b><small>Без профил · потвърждение по телефон</small></span><i aria-hidden="true">→</i></button>
         {message&&<p className="product-message" role="status">{message}</p>}
         <div className="purchase-benefits" aria-label="Предимства при поръчка"><p><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7zM6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm11 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg><b>Еконт до адрес или офис</b><small>Преглед, проба и тест преди плащане</small></p><p><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V3m0 0h5M4 3l4 4a7 7 0 1 1-2 7"/></svg><b>30 дни за връщане</b><small>Спокойно време да решите</small></p><p><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v16H8zM8 8h4m-4 4h3m-3 4h4"/></svg><b>Помощ с размера</b><small>0885 235 241</small></p></div>
         <div className="payment-panel"><span>Сигурно плащане</span><div className="payment-badges" aria-label="Методи за плащане"><b>VISA</b><b className="mastercard"><i/><i/></b><b>Apple Pay</b><b>G Pay</b><b className="econt">Econt</b></div></div>

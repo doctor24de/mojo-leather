@@ -84,7 +84,12 @@
 .product-buy { display:grid; grid-template-columns:1fr auto; align-items:center; gap:25px; margin-bottom:10px; }
 .product-buy .add-to-cart { margin:0; background:#fff; color:#111; border:1px solid #888; }
 .product-buy>strong { display:none; font-weight:400; }
-.quick-order-trigger { display:flex; justify-content:space-between; width:100%; margin:0 0 5px; padding:13px 0; border:0; border-bottom:1px solid #999; background:transparent; cursor:pointer; font-size:10px; letter-spacing:.08em; text-transform:uppercase; }
+.quick-order-trigger { display:flex; align-items:center; justify-content:space-between; width:100%; min-height:58px; margin:10px 0 16px; padding:11px 18px; border:1px solid #171512; background:#171512; color:#fff; cursor:pointer; text-align:left; }
+.quick-order-trigger>span { display:grid; gap:3px; }
+.quick-order-trigger b { font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
+.quick-order-trigger small { color:#c9c5bd; font-size:9px; letter-spacing:.03em; }
+.quick-order-trigger i { font:400 20px/1 Arial,sans-serif; transition:transform .2s; }
+.quick-order-trigger:hover i { transform:translateX(4px); }
 .stock-status { display:flex; align-items:center; gap:7px; margin:0 0 18px; font-size:11px; text-transform:uppercase; letter-spacing:.04em; }
 .stock-status i { width:8px; height:8px; border-radius:50%; background:#16875d; box-shadow:0 0 0 3px #16875d1a; }
 .stock-status span { color:#777; text-transform:none; letter-spacing:0; }
