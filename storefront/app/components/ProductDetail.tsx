@@ -18,11 +18,13 @@ export default function ProductDetail({ slug }: { slug: string }) {
   const [sizeChartOpen, setSizeChartOpen] = useState(false)
   const [selectedVariantId, setSelectedVariantId] = useState("")
   const [message, setMessage] = useState("")
+  const [favorite, setFavorite] = useState(false)
 
   useEffect(() => {
     if (!medusaConfigured) return
     getMedusaProduct(slug).then((result) => setProduct(result)).catch(() => setProduct(null)).finally(() => setLoading(false))
   }, [slug])
+  useEffect(()=>{try{setFavorite((JSON.parse(localStorage.getItem("furia-favorites")||"[]") as string[]).includes(slug))}catch{}},[slug])
 
   if (loading && !product) return <main className="product-loading">Зареждаме продукта…</main>
   if (!product) return <main className="product-loading"><h1>Продуктът не е намерен.</h1><a className="text-link" href="/women">Обратно към колекцията</a></main>
@@ -36,21 +38,20 @@ export default function ProductDetail({ slug }: { slug: string }) {
     try { await addItem(selectedVariantId); setMessage("Продуктът е добавен в количката.") }
     catch (error) { setMessage(error instanceof Error ? error.message : "Не успяхме да добавим продукта.") }
   }
+  const toggleFavorite=()=>{let saved:string[]=[];try{saved=JSON.parse(localStorage.getItem("furia-favorites")||"[]")}catch{}const next=saved.includes(slug)?saved.filter(item=>item!==slug):[...saved,slug];localStorage.setItem("furia-favorites",JSON.stringify(next));setFavorite(next.includes(slug))}
 
   return <>
     <main className="product-page">
       <div className="product-gallery"><img src={product.image} alt={`Кожено яке ${product.name}`}/></div>
       <div className="product-detail">
-        <p className="eyebrow">{product.category} · {product.color}</p>
-        <h1>{product.name}</h1>
-        <strong className="product-price">{formatPrice(product.price)}</strong>
+        <div className="product-detail-head"><div><p className="eyebrow">Нова колекция · {product.category}</p><h1>{product.name}</h1><strong className="product-price">{formatPrice(product.price)}</strong></div><button className={`product-favorite ${favorite?"active":""}`} onClick={toggleFavorite} aria-label={favorite?"Премахни от любими":"Добави в любими"}>♡</button></div>
         <p className="product-description">{product.description}</p>
         <div className="product-color"><span>Цвят</span><p><i aria-hidden="true"/> {product.color}</p></div>
         <div className="sizes">
           <div className="size-heading"><span>Избери размер</span><button type="button" onClick={() => setSizeChartOpen(true)}>Вижте таблицата с размери</button></div>
           <div>{variants.map(variant=>{const size=variant.options?.[0]?.value||variant.title;return <button className={selectedVariantId===variant.id?"selected":""} aria-pressed={selectedVariantId===variant.id} onClick={()=>{setSelectedVariantId(variant.id);setMessage("")}} key={variant.id}>{size}</button>})}</div>
         </div>
-        <button className="add-to-cart" disabled={cartBusy} onClick={addSelected}>{cartBusy?"Добавяме…":"Добави в количката"}</button>
+        <div className="product-buy"><button className="add-to-cart" disabled={cartBusy} onClick={addSelected}>{cartBusy?"Добавяме…":"Добави в количката"}</button><strong>{formatPrice(product.price)}</strong></div>
         {message&&<p className="product-message" role="status">{message}</p>}
         <details open><summary>Материал и изработка</summary><p>{material}. {craftsmanship}</p></details>
         <details><summary>Доставка и връщане</summary><p>Безплатна доставка над €250 и 30 дни за връщане.</p></details>
