@@ -2,6 +2,12 @@
   .header-actions button { font-size: 10px; }
   .header-actions button::before { content: none; }
 
+  .site-chrome,
+  .site-header,
+  .mobile-shop-nav {
+    background: #fff;
+  }
+
   .product-page {
     display: block;
     min-height: 0;
@@ -69,7 +75,15 @@
     overflow: hidden;
   }
 
+  .product-card .product-image {
+    display: block;
+  }
+
   .home-products .product-info {
+    position: static;
+  }
+
+  .collection-products .product-info {
     position: static;
   }
 }
