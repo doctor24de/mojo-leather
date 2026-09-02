@@ -8,6 +8,17 @@
     background: #fff;
   }
 
+  .site-header {
+    grid-template-columns: minmax(112px, 1fr) auto;
+  }
+
+  .site-header .header-tools {
+    width: auto;
+    margin-left: auto;
+    justify-self: end;
+    justify-content: flex-end;
+  }
+
   .product-page {
     display: block;
     min-height: 0;
@@ -55,7 +66,10 @@
   }
 
   .product-page .product-detail .product-description {
+    display: block;
+    overflow: visible;
     font: 14px/1.6 Arial, sans-serif;
+    -webkit-line-clamp: unset;
   }
 
   .product-page .product-buy {
@@ -137,8 +151,13 @@
   }
 
   .product-reviews h2 {
-    font-size: 44px;
-    line-height: .95;
+    font-size: 38px;
+    line-height: 1;
+  }
+
+  .product-reviews .review-grid {
+    display: grid;
+    gap: 12px;
   }
 
   .home-products .product-card {

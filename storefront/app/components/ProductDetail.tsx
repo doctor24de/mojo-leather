@@ -6,9 +6,9 @@ import { addCartLine, createCart, getMedusaProduct, medusaConfigured, saveQuickO
 import { useCommerce } from "./CommerceProvider"
 
 const reviews = [
-  ["Кожата е изключително мека, а кройката стои прекрасно. Якето изглежда още по-добре на живо.", "Мария К. · София"],
-  ["Размерът беше точен, доставката — бърза. Личи си вниманието към всеки детайл.", "Елена П. · Пловдив"],
-  ["Истинска класика, която мога да нося всеки ден. Определено бих поръчала отново.", "Никол Д. · Варна"],
+  ["Кожата е изключително мека, а кройката стои прекрасно. Якето изглежда още по-добре на живо.", "Мария Петрова", "София"],
+  ["Размерът беше точен, доставката — бърза. Личи си вниманието към всеки детайл.", "Елена Георгиева", "Пловдив"],
+  ["Истинска класика, която мога да нося всеки ден. Определено бих поръчала отново.", "Никол Димитрова", "Варна"],
 ]
 
 export default function ProductDetail({ slug }: { slug: string }) {
@@ -75,8 +75,8 @@ export default function ProductDetail({ slug }: { slug: string }) {
     </main>
     <section className="product-reviews" aria-labelledby="reviews-title">
       <p className="eyebrow">Мнения от нашите клиенти</p>
-      <h2 id="reviews-title">Носени с удоволствие.</h2>
-      <div className="review-grid">{reviews.map(([quote, author]) => <blockquote key={author}><div>★★★★★</div><p>„{quote}“</p><footer>{author}</footer></blockquote>)}</div>
+      <div className="reviews-heading"><h2 id="reviews-title">Истории, които остават.</h2><p>Любими якета, истински моменти и впечатления след носене.</p></div>
+      <div className="review-grid">{reviews.map(([quote, author, city],index) => <blockquote key={author}><div className="review-top"><span className="review-stars" aria-label="5 от 5 звезди">★★★★★</span><small>0{index+1}</small></div><p>„{quote}“</p><footer><i>{author.split(" ").map(name=>name[0]).join("")}</i><span><b>{author}</b><small>{city} · Клиент на Furia</small></span></footer></blockquote>)}</div>
     </section>
     {sizeChartOpen && <div className="size-modal" role="dialog" aria-modal="true" aria-labelledby="size-chart-title" onClick={() => setSizeChartOpen(false)}>
       <div className="size-modal-card" onClick={(event) => event.stopPropagation()}>
