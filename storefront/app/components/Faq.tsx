@@ -9,5 +9,5 @@ const commonQuestions: FaqItem[] = [
 ]
 
 export default function Faq({ title = "Често задавани въпроси", questions = commonQuestions }: { title?: string; questions?: FaqItem[] }) {
-  return <section className="faq-section" aria-labelledby="faq-title"><div className="faq-intro"><p className="eyebrow">Питайте ни директно</p><h2 id="faq-title">{title}</h2><p>Това са въпросите, които чуваме най-често. Ако вашият го няма — пишете ни. Отговаря човек, не бот.</p><a href="mailto:hello@furialeather.com" className="text-link">hello@furialeather.com</a></div><div className="faq-list">{questions.map((item,index)=><details key={item.question} open={index===0}><summary><span>{item.question}</span><i aria-hidden="true"/></summary><p>{item.answer}</p></details>)}</div></section>
+  return <section className="faq-section" aria-labelledby="faq-title"><div className="faq-intro"><p className="eyebrow">Питайте ни директно</p><h2 id="faq-title">{title}</h2><p>Това са въпросите, които чуваме най-често. Ако вашият го няма — пишете ни. Отговаря човек, не бот.</p><a href="mailto:office@furialeather.bg" className="text-link">office@furialeather.bg</a></div><div className="faq-list">{questions.map((item,index)=><details key={item.question} open={index===0}><summary><span>{item.question}</span><i aria-hidden="true"/></summary><p>{item.answer}</p></details>)}</div></section>
 }

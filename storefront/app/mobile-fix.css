@@ -35,6 +35,13 @@
     padding: 34px 20px 48px;
   }
 
+  .product-breadcrumb {
+    display: flex;
+    overflow: hidden;
+    padding: 10px 20px;
+    white-space: nowrap;
+  }
+
   .product-page .product-detail h1 {
     max-width: 310px;
     margin: 0 0 12px;
@@ -64,6 +71,36 @@
     width: 100%;
     min-height: 48px;
     margin: 0;
+  }
+
+  .product-page .stock-status {
+    display: flex;
+    margin: 0 0 18px;
+  }
+
+  .product-page .purchase-benefits {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 24px 0 18px;
+  }
+
+  .product-page .purchase-benefits p {
+    padding: 14px 0;
+  }
+
+  .product-page .purchase-benefits p + p {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid #ddd;
+  }
+
+  .product-page .payment-badges {
+    display: flex;
+    gap: 6px;
+  }
+
+  .product-page .product-specifications h2 {
+    font-size: 25px;
   }
 
   .product-reviews h2 {

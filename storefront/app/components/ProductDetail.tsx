@@ -31,6 +31,11 @@ export default function ProductDetail({ slug }: { slug: string }) {
 
   const material = product.material || "100% естествена кожа"
   const craftsmanship = product.craftsmanship || "Вискозна подплата. Произведено в малка серия."
+  const specifications = [
+    ["Материал", material], ["Подплата", product.lining], ["Цвят", product.color],
+    ["Кройка", product.fit], ["Закопчаване", product.fastening], ["Джобове", product.pockets],
+    ["Произход", product.origin], ["Ръст на модела", product.modelHeight], ["Размер на модела", product.modelSize],
+  ].filter((item): item is [string,string] => Boolean(item[1]))
   const sizeOrder=["XXS","XS","S","M","L","XL","XXL"]
   const variants = [...(product.variants || [])].sort((a,b)=>sizeOrder.indexOf(a.options?.[0]?.value||a.title)-sizeOrder.indexOf(b.options?.[0]?.value||b.title))
   const addSelected = async () => {
@@ -42,6 +47,7 @@ export default function ProductDetail({ slug }: { slug: string }) {
   const toggleFavorite=()=>{let saved:string[]=[];try{saved=JSON.parse(localStorage.getItem("furia-favorites")||"[]")}catch{}const next=saved.includes(slug)?saved.filter(item=>item!==slug):[...saved,slug];localStorage.setItem("furia-favorites",JSON.stringify(next));setFavorite(next.includes(slug))}
 
   return <>
+    <nav className="product-breadcrumb" aria-label="Път до продукта"><a href="/">Начало</a><span>/</span><a href={product.category==="Жени"?"/women":"/men"}>{product.category}</a><span>/</span><strong>{product.name}</strong></nav>
     <main className="product-page">
       <div className="product-gallery"><img src={product.image} alt={`Кожено яке ${product.name}`}/></div>
       <div className="product-detail">
@@ -52,10 +58,14 @@ export default function ProductDetail({ slug }: { slug: string }) {
           <div className="size-heading"><span>Избери размер</span><button type="button" onClick={() => setSizeChartOpen(true)}>Вижте таблицата с размери</button></div>
           <div>{variants.map(variant=>{const size=variant.options?.[0]?.value||variant.title;return <button className={selectedVariantId===variant.id?"selected":""} aria-pressed={selectedVariantId===variant.id} onClick={()=>{setSelectedVariantId(variant.id);setMessage("")}} key={variant.id}>{size}</button>})}</div>
         </div>
+        <p className="stock-status"><i/> В наличност <span>· изпращане до 1 работен ден</span></p>
         <div className="product-buy"><button className="add-to-cart" disabled={cartBusy} onClick={addSelected}>{cartBusy?"Добавяме…":"Добави в количката"}</button><strong>{formatPrice(product.price)}</strong></div>
         {message&&<p className="product-message" role="status">{message}</p>}
+        <div className="purchase-benefits" aria-label="Предимства при поръчка"><p><span>↗</span><b>Еконт до адрес или офис</b><small>Преглед, проба и тест преди плащане</small></p><p><span>↺</span><b>30 дни за връщане</b><small>Спокойно време да решите</small></p><p><span>◇</span><b>Помощ с размера</b><small>0885 235 241</small></p></div>
+        <div className="payment-panel"><span>Сигурно плащане</span><div className="payment-badges" aria-label="Методи за плащане"><b>VISA</b><b className="mastercard"><i/><i/></b><b>Apple Pay</b><b>G Pay</b><b className="econt">Econt</b></div></div>
         <details open><summary>Материал и изработка</summary><p>{material}. {craftsmanship}</p></details>
         <details><summary>Доставка и връщане</summary><p>Безплатна доставка над €250 и 30 дни за връщане.</p></details>
+        <section className="product-specifications" aria-labelledby="specifications-title"><p className="eyebrow">Детайли</p><h2 id="specifications-title">Всичко за модела</h2><dl>{specifications.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl></section>
       </div>
     </main>
     <section className="product-reviews" aria-labelledby="reviews-title">
