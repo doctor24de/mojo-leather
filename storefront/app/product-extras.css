@@ -95,9 +95,10 @@
  .size-heading { align-items:center; }
  .size-heading button { max-width:145px; }
  .sizes>div { grid-template-columns:repeat(5,1fr); }
- .product-buy { position:sticky; z-index:15; bottom:0; margin:0 -20px -45px; padding:12px 20px calc(12px + env(safe-area-inset-bottom)); grid-template-columns:1fr auto; background:#fff; border-top:1px solid #ddd; }
+ .product-buy { position:static; margin:8px 0 20px; padding:0; grid-template-columns:1fr auto; background:#fff; border-top:0; }
  .product-buy .add-to-cart { min-height:48px; }
  .product-buy>strong { display:block; min-width:72px; text-align:right; font-size:14px; }
  .product-message { margin:14px 0 0; }
  .product-reviews { padding-top:65px; }
+ .product-reviews h2 { font-size:44px; line-height:.95; }
 }

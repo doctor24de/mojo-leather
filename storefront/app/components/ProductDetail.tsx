@@ -31,7 +31,8 @@ export default function ProductDetail({ slug }: { slug: string }) {
 
   const material = product.material || "100% естествена кожа"
   const craftsmanship = product.craftsmanship || "Вискозна подплата. Произведено в малка серия."
-  const variants = product.variants || []
+  const sizeOrder=["XXS","XS","S","M","L","XL","XXL"]
+  const variants = [...(product.variants || [])].sort((a,b)=>sizeOrder.indexOf(a.options?.[0]?.value||a.title)-sizeOrder.indexOf(b.options?.[0]?.value||b.title))
   const addSelected = async () => {
     if (!selectedVariantId) { setMessage("Моля, избери размер."); return }
     setMessage("")
