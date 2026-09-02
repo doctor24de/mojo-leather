@@ -147,6 +147,10 @@
 .quick-order-status { margin:16px 0 0; padding:12px; background:#e9e4da; font-size:12px; line-height:1.5; }
 .social-links { display:flex; gap:9px; margin-top:25px; }
 .footer-grid .social-links a { display:grid!important; place-items:center; width:34px; height:34px; margin:0!important; border:1px solid #ffffff42; border-radius:50%; color:#fff!important; font:600 12px Arial,sans-serif; }
+.footer-grid .social-links svg { width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.footer-grid .social-links a:last-child svg { fill:currentColor; stroke:none; }
+.footer-grid .social-links .social-dot { fill:currentColor; stroke:none; }
+.footer-grid .social-links a:hover { background:#fff; color:#171512!important; }
 .footer-commerce { display:flex; justify-content:space-between; gap:35px; align-items:end; margin-top:55px; padding:25px 0; border-top:1px solid #3b3833; border-bottom:1px solid #3b3833; }
 .footer-commerce>div { display:flex; align-items:center; gap:16px; }
 .footer-commerce span { color:#8f8a81; font-size:9px; letter-spacing:.1em; text-transform:uppercase; }
