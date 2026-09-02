@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react"
 import { formatPrice, type Product } from "../data"
-import { addCartLine, createCart, getMedusaProduct, medusaConfigured, saveQuickOrder } from "../lib/medusa"
+import { addCartLine, createCart, getMedusaProduct, medusaConfigured, saveQuickOrder, type MedusaProduct } from "../lib/medusa"
 import { useCommerce } from "./CommerceProvider"
 
 const reviews = [
@@ -11,10 +11,10 @@ const reviews = [
   ["Истинска класика, която мога да нося всеки ден. Определено бих поръчала отново.", "Никол Димитрова", "Варна"],
 ]
 
-export default function ProductDetail({ slug }: { slug: string }) {
+export default function ProductDetail({ slug, initialProduct }: { slug: string; initialProduct?:MedusaProduct|null }) {
   const { addItem, cartBusy } = useCommerce()
-  const [product, setProduct] = useState<(Product & { variants?: Array<{id:string;title:string;options:Array<{value:string}>}> }) | null>(null)
-  const [loading, setLoading] = useState(medusaConfigured)
+  const [product, setProduct] = useState<(Product & { variants?: Array<{id:string;title:string;options:Array<{value:string}>}> }) | null>(initialProduct||null)
+  const [loading, setLoading] = useState(!initialProduct&&medusaConfigured)
   const [sizeChartOpen, setSizeChartOpen] = useState(false)
   const [selectedVariantId, setSelectedVariantId] = useState("")
   const [message, setMessage] = useState("")
@@ -24,9 +24,10 @@ export default function ProductDetail({ slug }: { slug: string }) {
   const [quickSuccess, setQuickSuccess] = useState("")
 
   useEffect(() => {
+    if(initialProduct?.slug===slug){setProduct(initialProduct);setLoading(false);return}
     if (!medusaConfigured) return
     getMedusaProduct(slug).then((result) => setProduct(result)).catch(() => setProduct(null)).finally(() => setLoading(false))
-  }, [slug])
+  }, [slug,initialProduct])
   useEffect(()=>{try{setFavorite((JSON.parse(localStorage.getItem("furia-favorites")||"[]") as string[]).includes(slug))}catch{}},[slug])
 
   if (loading && !product) return <main className="product-loading">Зареждаме продукта…</main>
