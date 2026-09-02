@@ -19,6 +19,11 @@
     justify-content: flex-end;
   }
 
+  .site-header .brand-logo {
+    width: 138px;
+    height: 54px;
+  }
+
   .product-page {
     display: block;
     min-height: 0;
