@@ -1,2 +1,16 @@
+import type { Metadata } from "next"
 import ProductDetail from "../../components/ProductDetail"
+import { formatPrice } from "../../data"
+import { getMedusaProduct } from "../../lib/medusa"
+
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
+  const {slug}=await params
+  const product=await getMedusaProduct(slug).catch(()=>null)
+  if(!product)return{title:"Продукт | Furia Leather"}
+  const title=`${product.name} | Furia Leather`
+  const description=`${product.description} Цена ${formatPrice(product.price)}. Доставка с Еконт, преглед и тест.`
+  const url=`https://mojo.doktor24.xyz/product/${product.slug}`
+  return{title,description,alternates:{canonical:url},openGraph:{title,description,url,type:"website",images:[{url:product.image,alt:product.name}]},twitter:{card:"summary_large_image",title,description,images:[product.image]}}
+}
+
 export default async function ProductPage({params}:{params:Promise<{slug:string}>}){const{slug}=await params;return <ProductDetail slug={slug}/>}
