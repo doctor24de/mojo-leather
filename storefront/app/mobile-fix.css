@@ -43,11 +43,14 @@
   }
 
   .product-page .product-detail h1 {
-    max-width: 310px;
+    display: -webkit-box;
+    max-width: 330px;
     margin: 0 0 12px;
-    font: 400 22px/1.18 Arial, sans-serif;
+    overflow: hidden;
+    font: 400 18px/1.22 Arial, sans-serif;
     letter-spacing: 0;
-    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
     text-transform: uppercase;
   }
 
