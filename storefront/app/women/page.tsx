@@ -1,2 +1,2 @@
-import ProductGrid from "../components/ProductGrid"
-export default function Women(){return <main className="catalog-page"><header><p className="eyebrow">Колекция 2026</p><h1>За нея.<br/><em>Без компромис.</em></h1><p>Кожени якета с уверена линия, създадени да останат.</p></header><div className="catalog-tools"><span>Жени</span><span>Колекция</span></div><ProductGrid category="Жени"/></main>}
+import CollectionPage from "../components/CollectionPage"
+export default function Women(){return <CollectionPage category="Жени" title="За нея." italicTitle="Без компромис." lead="Уверени силуети от естествена кожа. Създадени за жените, които не чакат специален повод, за да бъдат себе си." hero="/furia/editorial/women/hero-women.webp" full="/furia/editorial/women/women-full.webp" detail="/furia/editorial/women/women-detail.webp" heroDimensions={[1122,1402]}/>}

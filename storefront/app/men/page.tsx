@@ -1,2 +1,2 @@
-import ProductGrid from "../components/ProductGrid"
-export default function Men(){return <main className="catalog-page"><header><p className="eyebrow">Колекция 2026</p><h1>За него.<br/><em>Собствени правила.</em></h1><p>Кожени якета с точна кройка, естествено усещане и характер.</p></header><div className="catalog-tools"><span>Мъже</span><span>Колекция</span></div><ProductGrid category="Мъже"/></main>}
+import CollectionPage from "../components/CollectionPage"
+export default function Men(){return <CollectionPage category="Мъже" title="За него." italicTitle="Собствени правила." lead="Точна кройка, естествено усещане и характер без излишен шум. Якета, които се носят, а не се пазят." hero="/furia/editorial/men/hero-men.webp" full="/furia/editorial/men/men-full.webp" detail="/furia/editorial/men/men-detail.webp" heroDimensions={[1122,1402]}/>}
