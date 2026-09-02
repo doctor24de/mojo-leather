@@ -103,10 +103,12 @@ footer { background:#050505; }
 .home-products-head>p { max-width:520px; margin:0; font:17px/1.6 Georgia,serif; color:#4e4942; }
 .home-products-head nav { display:grid; gap:11px; }
 .home-products-head nav a { padding-bottom:6px; border-bottom:1px solid; font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
-.home-products .product-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:2px; }
-.home-products .product-card { background:#fff; padding-bottom:18px; }
+.home-products .product-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:2px; margin-bottom:clamp(42px,5vw,72px); align-items:stretch; }
+.home-products .product-card { display:flex; flex-direction:column; min-width:0; background:#fff; padding-bottom:18px; }
 .home-products .product-image { height:auto; aspect-ratio:3/4; background:#ebe7df; }
-.home-products .product-info { padding:17px 16px 0; }
+.home-products .product-info { flex:1; gap:16px; padding:17px 16px 0; }
+.home-products .product-info>div { min-width:0; }
+.home-products .product-info strong { flex:0 0 auto; white-space:nowrap; }
 .home-products .product-info h3 { font-size:17px; text-transform:none; }
 .home-products .product-info strong { font-size:14px; }
 .outlet-link { color:#9f2f25; }
