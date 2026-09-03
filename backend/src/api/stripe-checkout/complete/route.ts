@@ -4,7 +4,7 @@ import { capturePaymentWorkflow } from "@medusajs/core-flows"
 import Stripe from "stripe"
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
-  const storefrontUrl = (process.env.STOREFRONT_URL || "https://mojo.doktor24.xyz").replace(/\/$/, "")
+  const storefrontUrl = (process.env.STOREFRONT_URL || "https://furialeather.bg").replace(/\/$/, "")
   const secretKey = process.env.STRIPE_SECRET_KEY
   const sessionId = String(req.query.session_id || "")
   if (!secretKey || !sessionId) return res.redirect(`${storefrontUrl}/payment-success?status=failed`)

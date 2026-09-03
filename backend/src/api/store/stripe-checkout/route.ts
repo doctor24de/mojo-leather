@@ -14,8 +14,8 @@ export async function POST(req: MedusaRequest<CheckoutBody>, res: MedusaResponse
   const order = data[0]
   if (!order) throw new Error("Medusa order was not found")
 
-  const storefrontUrl = (process.env.STOREFRONT_URL || "https://mojo.doktor24.xyz").replace(/\/$/, "")
-  const backendUrl = (process.env.MEDUSA_BACKEND_URL || "https://mojo-api.doktor24.xyz").replace(/\/$/, "")
+  const storefrontUrl = (process.env.STOREFRONT_URL || "https://furialeather.bg").replace(/\/$/, "")
+  const backendUrl = (process.env.MEDUSA_BACKEND_URL || "https://api.furialeather.bg").replace(/\/$/, "")
   const stripe = new Stripe(secretKey)
   const session = await stripe.checkout.sessions.create({
     mode: "payment",

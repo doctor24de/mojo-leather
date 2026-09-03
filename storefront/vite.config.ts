@@ -48,7 +48,7 @@ export default defineConfig(async () => {
       ...(isCodexSeatbeltSandbox ? { watch: { useFsEvents: false, usePolling: true } } : {}),
       proxy: {
         "/medusa": {
-          target: "https://mojo-api.doktor24.xyz",
+          target: "https://api.furialeather.bg",
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/medusa/, ""),
         },

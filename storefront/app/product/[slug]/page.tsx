@@ -12,7 +12,7 @@ export async function generateMetadata({params}:{params:Promise<{slug:string}>})
   if(!product)return{title:"Продукт | Furia Leather"}
   const title=`${product.name} | Furia Leather`
   const description=`${product.description} Цена ${formatPrice(product.price)}. Доставка с Еконт, преглед и тест.`
-  const url=`https://mojo.doktor24.xyz/product/${product.slug}`
+  const url=`https://furialeather.bg/product/${product.slug}`
   return{title,description,alternates:{canonical:url},openGraph:{title,description,url,type:"website",images:[{url:product.image,alt:product.name}]},twitter:{card:"summary_large_image",title,description,images:[product.image]}}
 }
 
