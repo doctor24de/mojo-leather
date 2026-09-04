@@ -142,8 +142,13 @@ footer { background:#050505; }
 .collection-products>header { display:flex; justify-content:space-between; align-items:end; gap:40px; padding-bottom:34px; margin-bottom:35px; border-bottom:1px solid #bcb6ac; }
 .collection-products>header h2 { margin:8px 0 0; font:400 clamp(48px,5vw,80px)/.9 Georgia,serif; letter-spacing:-.05em; }
 .collection-products>header>p { max-width:390px; margin:0; line-height:1.55; color:#69635b; }
-.collection-products .product-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:30px 14px; }
+.collection-products .product-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:30px 14px; align-items:stretch; margin-bottom:clamp(28px,4vw,58px); }
+.collection-products .product-card { display:grid; grid-template-rows:auto minmax(96px,auto); align-content:start; min-width:0; overflow:hidden; background:#fff; }
 .collection-products .product-image { height:auto; aspect-ratio:3/4; background:#ebe7df; }
+.collection-products .product-info { position:static; display:flex; gap:14px; align-items:flex-start; min-width:0; height:100%; padding:17px 14px 16px; background:#fff; }
+.collection-products .product-info>div { min-width:0; }
+.collection-products .product-info h3 { overflow-wrap:anywhere; }
+.collection-products .product-info strong { flex:0 0 auto; white-space:nowrap; }
 .collection-story { display:grid; grid-template-columns:1fr .8fr .65fr; min-height:760px; background:#ddd6ca; }
 .collection-story-image,.collection-detail-image { overflow:hidden; }
 .collection-story-copy { display:flex; flex-direction:column; justify-content:center; padding:6vw; }
@@ -208,6 +213,7 @@ footer { background:#050505; }
  .quick-search { padding:25px 20px 35px; }.quick-search input { font-size:25px; }.quick-results { grid-template-columns:1fr; max-height:60vh; overflow:auto; }.quick-results>a { grid-template-columns:60px 1fr auto; }.quick-results img { width:60px; height:75px; }
  .home-products { padding:70px 16px; }.home-products-head { grid-template-columns:1fr; gap:22px; }.home-products-head>p { font-size:15px; }.home-products-head nav { display:flex; gap:25px; }
  .home-products .product-grid,.collection-products .product-grid { grid-template-columns:1fr 1fr; gap:24px 10px; }
+ .collection-products .product-card { grid-template-rows:auto minmax(106px,auto); }
  .home-values { grid-template-columns:1fr 1fr; }.home-values article { min-height:220px; }.home-values article:nth-child(2) { border-right:0; }.home-values article:nth-child(-n+2) { border-bottom:1px solid #c9c3b9; }
  .collection-hero { grid-template-columns:1fr; }.collection-hero-copy { min-height:62svh; padding:80px 22px 60px; }.collection-hero-image { min-height:75svh; }.collection-hero-copy h1 { font-size:68px; }
  .collection-note { grid-template-columns:1fr; gap:35px; padding:65px 22px; }.collection-products { padding:75px 16px; }.collection-products>header { display:block; }.collection-products>header>p { margin-top:25px; }
@@ -221,6 +227,7 @@ footer { background:#050505; }
  .home-products .product-grid { grid-template-columns:1fr; gap:38px; }.collection-products .product-grid { grid-template-columns:1fr 1fr; }
  .home-products { padding:62px 14px 72px; }.home-products-head { padding-bottom:27px; margin-bottom:28px; }.home-products-head h2 { font-size:48px; max-width:330px; }.home-products-head nav { justify-content:space-between; }.home-products .product-card { padding-bottom:20px; }.home-products .product-image { aspect-ratio:4/5; }.home-products .product-info { display:flex; padding:16px 4px 0; }.home-products .product-info h3 { font-size:18px; max-width:240px; }.home-products .product-info strong { margin:0; font-size:15px; }
  .home-products .product-card { overflow:hidden; }.home-products .product-info,.collection-products .product-info { position:static; display:block; }.home-products .product-info h3,.collection-products .product-info h3 { font-size:14px; }.home-products .product-info strong,.collection-products .product-info strong { display:block; margin-top:8px; }
+ .collection-products .product-card { grid-template-rows:auto minmax(118px,auto); }
  .home-values { grid-template-columns:1fr; }.home-values article { min-height:190px; border-right:0; border-bottom:1px solid #c9c3b9; }.home-values h3 { margin-top:40px; }
  .collection-hero-copy h1 { font-size:58px; }.collection-hero-image { min-height:68svh; }.collection-products>header h2 { font-size:48px; }
  .collection-story-image { height:68svh; }.faq-list summary { font-size:16px; }
